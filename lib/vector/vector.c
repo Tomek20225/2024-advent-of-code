@@ -2,6 +2,7 @@
 #include <stdlib.h>
 #include "vector.h"
 
+// Integer Vector
 int_vector* v_create() {
     int_vector* v = malloc(sizeof(int_vector));
     if (v) {
@@ -76,4 +77,100 @@ void v_print(int_vector* v) {
     }
 
     printf("\n");
+}
+
+size_t v_len(int_vector* v) {
+    if (!v) {
+        return -1;
+    }
+    return v->items;
+}
+
+
+// Strings
+string* str_create() {
+    string* str = malloc(sizeof(string));
+    if (str) {
+        str->data = malloc(sizeof(char));
+        str->size = 1;
+        str->items = 0;
+    }
+    return str;
+}
+
+void str_delete(string* str) {
+    if (str) {
+        free(str->data);
+        free(str);
+    }
+}
+
+void str_append(string* str, char c) {
+    if (!str) {
+        return;
+    }
+
+    if (str->items + 1 > str->size) {
+        size_t new_size = str->size * 2;
+        char* p = realloc(str->data, new_size * sizeof(char));
+        if (p) {
+            str->data = p;
+            str->size = new_size;
+        }
+    }
+
+    str->data[str->items] = c;
+    str->items++;
+}
+
+char* str_get(string* str, size_t i) {
+    if (str && i < str->size) {
+        return &str->data[i];
+    }
+    return NULL;
+}
+
+void str_set(string* str, size_t i, char c) {
+    if (str && i < str->size) {
+        str->data[i] = c;
+    }
+}
+
+void str_remove(string* str, size_t i) {
+    if (!str || i >= str->items) {
+        return;
+    }
+
+    for (; i < str->items - 1; i++) {
+        str->data[i] = str->data[i + 1];
+    }
+
+    str->items--;
+}
+
+void str_print(string* str) {
+    if (!str) {
+        printf("The given string doesn't exist.");
+        return;
+    }
+
+    for (int i = 0; i < str->items; i++) {
+        char* value = str_get(str, i);
+        if (value) {
+            printf("%c", *value);
+        }
+    }
+
+    printf("\n");
+}
+
+char* str(string* str) {
+    return str->data;
+}
+
+size_t str_len(string* v) {
+    if (!v) {
+        return -1;
+    }
+    return v->items;
 }
