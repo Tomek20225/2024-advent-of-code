@@ -1,5 +1,6 @@
 #include <stdio.h>
 #include <stdlib.h>
+#include <string.h>
 #include "vector.h"
 
 // Integer Vector
@@ -11,6 +12,30 @@ int_vector* v_create() {
         v->items = 0;
     }
     return v;
+}
+
+int_vector* v_copy(int_vector* v) {
+    if (!v) {
+        return NULL;
+    }
+
+    int_vector* nv = malloc(sizeof(int_vector));
+    if (!nv) {
+        return NULL;
+    }
+
+    nv->size = v->size;
+    nv->items = v->items;
+
+    nv->data = malloc(v->size * sizeof(int));
+    if (!nv->data) {
+        free(nv);
+        return NULL;
+    }
+
+    memcpy(nv->data, v->data, v->size * sizeof(int));
+
+    return nv;
 }
 
 void v_delete(int_vector* v) {
@@ -96,6 +121,30 @@ string* str_create() {
         str->items = 0;
     }
     return str;
+}
+
+string* str_copy(string* str) {
+    if (!str) {
+        return NULL;
+    }
+
+    string* n_str = malloc(sizeof(string));
+    if (!n_str) {
+        return NULL;
+    }
+
+    n_str->size = str->size;
+    n_str->items = str->items;
+
+    n_str->data = malloc(n_str->size * sizeof(char));
+    if (!n_str->data) {
+        free(n_str);
+        return NULL;
+    }
+
+    memcpy(n_str->data, str->data, str->size * sizeof(int));
+
+    return n_str;
 }
 
 void str_delete(string* str) {

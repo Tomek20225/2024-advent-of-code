@@ -11,6 +11,7 @@ typedef struct {
 } int_vector;
 
 int_vector* v_create();
+int_vector* v_copy(int_vector* v);
 void v_delete(int_vector* v);
 void v_append(int_vector* v, int n);
 int* v_get(int_vector* v, size_t i);
@@ -27,6 +28,7 @@ typedef struct {
 } string;
 
 string* str_create();
+string* str_copy(string* str);
 void str_delete(string* str);
 void str_append(string* str, char c);
 char* str_get(string* str, size_t i);

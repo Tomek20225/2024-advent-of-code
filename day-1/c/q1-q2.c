@@ -27,6 +27,27 @@ int find_and_pop_min(int_vector* v) {
     return min;
 }
 
+int count_occurences(int_vector* v, int n) {
+    if (!v) {
+        return -1;
+    }
+
+    int occurences = 0;
+
+    for (int i = 0; i < v_len(v); i++) {
+        int* num_ptr = v_get(v, i);
+        if (!num_ptr) {
+            continue;
+        }
+        int num = *num_ptr;
+        if (num == n) {
+            occurences++;
+        }
+    }
+
+    return occurences;
+}
+
 int str_to_int(string* str) {
     int len = str_len(str);
     int num = 0;
@@ -53,6 +74,7 @@ int main() {
         return 1;
     }
 
+    // Processing
     int_vector* nums1 = v_create();
     int_vector* nums2 = v_create();
     
@@ -91,6 +113,20 @@ int main() {
         }
     };
 
+    // Q2
+    int similarity_score = 0;
+
+    for (int i = 0; i < v_len(nums1); i++) {
+        int* num_ptr = v_get(nums1, i);
+        if (!num_ptr) {
+            continue;
+        }
+
+        int num = *num_ptr;
+        similarity_score += num * count_occurences(nums2, num);
+    }
+
+    // Q1
     int distance_sum = 0;
 
     while (v_len(nums1) != 0) {
@@ -99,8 +135,11 @@ int main() {
         distance_sum += abs(min1 - min2);
     }
 
-    printf("Result: %i\n", distance_sum);
+    // Results
+    printf("Q1 result: %i\n", distance_sum);
+    printf("Q2 result: %i\n", similarity_score);
 
+    // Cleanup
     v_delete(nums1);
     v_delete(nums2);
     fclose(file_ptr);
