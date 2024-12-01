@@ -1,0 +1,18 @@
+# C build files (files without extension or with .out extension)
+*
+!/**/
+!*.*
+*.out
+
+# C debug files
+*.dSYM
+
+# Include Makefile
+!Makefile
+
+# VS Code files
+.vscode
+
+# Inputs without '-example.txt' in them
+*.txt
+!input-example.txt
