@@ -1,6 +1,5 @@
 #include <stdio.h>
 #include <stdlib.h>
-#include <math.h>
 #include "../../lib/vector/vector.h"
 
 int find_and_pop_min(int_vector* v) {
@@ -46,22 +45,6 @@ int count_occurences(int_vector* v, int n) {
     }
 
     return occurences;
-}
-
-int str_to_int(string* str) {
-    int len = str_len(str);
-    int num = 0;
-
-    for (int i = len - 1; i >= 0; i--) {
-        size_t str_idx = len - i - 1;
-        char* char_value = str_get(str, str_idx);
-        if (char_value) {
-            int int_value = *char_value - '0';
-            num += pow(10, i) * int_value;
-        }
-    }
-
-    return num;
 }
 
 int main() {

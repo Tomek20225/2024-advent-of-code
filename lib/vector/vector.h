@@ -20,6 +20,22 @@ void v_remove(int_vector* v, size_t i);
 void v_print(int_vector* v);
 size_t v_len(int_vector* v);
 
+// Matrix (Vector of Integer Vectors)
+typedef struct {
+    size_t size;
+    size_t items;
+    int_vector** data;
+} matrix;
+
+matrix* matrix_create();
+void matrix_delete(matrix* m);
+void matrix_append(matrix* m, int_vector* v);
+int_vector* matrix_get(matrix* m, size_t i);
+void matrix_set(matrix* m, size_t i, int_vector* v);
+void matrix_remove(matrix* m, size_t i);
+void matrix_print(matrix* m);
+size_t matrix_len(matrix* m);
+
 // Char Vector (Mutabe String)
 typedef struct {
     size_t size;
@@ -38,5 +54,6 @@ void str_print(string* str);
 void str_print(string* str);
 char* str(string* str);
 size_t str_len(string* str);
+int str_to_int(string* str);
 
 #endif

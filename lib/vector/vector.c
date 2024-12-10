@@ -1,6 +1,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+#include <math.h>
 #include "vector.h"
 
 // Integer Vector
@@ -94,14 +95,18 @@ void v_print(int_vector* v) {
         return;
     }
 
+    printf("[");
     for (int i = 0; i < v->items; i++) {
         int* value = v_get(v, i);
         if (value) {
-            printf("%i, ", *value);
+            printf("%i", *value);
+
+            if (i != v->items - 1) {
+                printf(", ");
+            }
         }
     }
-
-    printf("\n");
+    printf("]\n");
 }
 
 size_t v_len(int_vector* v) {
@@ -109,6 +114,98 @@ size_t v_len(int_vector* v) {
         return -1;
     }
     return v->items;
+}
+
+
+// Matrix (Vector of Integer Vectors)
+matrix* matrix_create() {
+    matrix* v = malloc(sizeof(matrix));
+    if (v) {
+        v->data = malloc(sizeof(int_vector));
+        v->size = 1;
+        v->items = 0;
+    }
+    return v;
+}
+
+void matrix_delete(matrix* m) {
+    if (m) {
+        for (int i = 0; i < m->items; i++) {
+            v_delete(m->data[i]);
+        }
+        free(m->data);
+        free(m);
+    }
+}
+
+void matrix_append(matrix* m, int_vector* v) {
+    if (!m || !v) {
+        return;
+    }
+
+    if (m->items + 1 > m->size) {
+        size_t new_size = m->size * 2;
+        int_vector** p = realloc(m->data, new_size * sizeof(int_vector));
+        if (p) {
+            m->data = p;
+            m->size = new_size;
+        }
+    }
+
+    m->data[m->items] = v;
+    m->items++;
+}
+
+int_vector* matrix_get(matrix* m, size_t i) {
+    if (m && i < m->size) {
+        return m->data[i];
+    }
+    return NULL;
+}
+
+void matrix_set(matrix* m, size_t i, int_vector* v) {
+    if (v && m && i < m->size) {
+        m->data[i] = v;
+    }
+}
+
+void matrix_remove(matrix* m, size_t i) {
+    if (!m || i >= m->items) {
+        return;
+    }
+
+    for (; i < m->items - 1; i++) {
+        m->data[i] = m->data[i + 1];
+    }
+
+    m->items--;
+}
+
+void matrix_print(matrix* m) {
+    if (!m) {
+        printf("The given matrix doesn't exist.");
+        return;
+    }
+
+    printf("[");
+    for (int i = 0; i < m->items; i++) {
+        int_vector* v_ptr = matrix_get(m, i);
+        if (v_ptr) {
+            if (i == 0) {
+                printf("\n");
+            }
+            printf("  ");
+            v_print(v_ptr);
+        }
+    }
+    printf("]\n");
+}
+
+size_t matrix_len(matrix* m) {
+    if (!m) {
+        return -1;
+    }
+    return m->items;
 }
 
 
@@ -222,4 +319,20 @@ size_t str_len(string* v) {
         return -1;
     }
     return v->items;
+}
+
+int str_to_int(string* str) {
+    int len = str_len(str);
+    int num = 0;
+
+    for (int i = len - 1; i >= 0; i--) {
+        size_t str_idx = len - i - 1;
+        char* char_value = str_get(str, str_idx);
+        if (char_value) {
+            int int_value = *char_value - '0';
+            num += pow(10, i) * int_value;
+        }
+    }
+
+    return num;
 }
